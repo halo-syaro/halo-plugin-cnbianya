@@ -14,5 +14,6 @@ module.exports = {
   },
   env: {
     "vue/setup-compiler-macros": true,
+    "@typescript-eslint/ban-ts-comment": false
   },
 };

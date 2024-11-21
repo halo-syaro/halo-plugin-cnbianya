@@ -9,15 +9,15 @@ export default definePlugin({
     {
       parentName: "Root",
       route: {
-        path: "/example",
-        name: "Example",
+        path: "/postConfig",
+        name: "postConfig",
         component: HomeView,
         meta: {
-          title: "示例页面",
+          title: "产品详情配置",
           searchable: true,
           menu: {
-            name: "示例页面",
-            group: "示例分组",
+            name: "产品详情配置",
+            group: "文章配置",
             icon: markRaw(IconPlug),
             priority: 0,
           },

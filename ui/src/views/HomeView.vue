@@ -1,172 +1,270 @@
 <script setup lang="ts">
-import confetti from "canvas-confetti";
-import { onMounted } from "vue";
-import RiShareCircleLine from "~icons/ri/share-circle-line";
-import RiCodeBoxLine from "~icons/ri/code-box-line";
-import RiBookReadLine from "~icons/ri/book-read-line";
-import RiComputerLine from "~icons/ri/computer-line";
-import RiArrowRightSLine from "~icons/ri/arrow-right-s-line";
+// @ts-nocheck
+import dayjs from "dayjs";
+import { ref, computed } from "vue";
+import {
+  Card,
+  Table,
+  Tag,
+  Pagination,
+  ConfigProvider,
+  Button,
+  Input,
+  Modal,
+  Drawer,
+  Divider,
+  Typography,
+  TypographyTitle
+} from "ant-design-vue";
+import { getPost, getPostDetail, updatePostDetail } from "@/api/modules/post";
+import zhCN from "ant-design-vue/es/locale/zh_CN";
+import Banner from "./components/Banner.vue";
 
-onMounted(() => {
-  confetti({
-    particleCount: 100,
-    spread: 70,
-    origin: { y: 0.6, x: 0.58 },
-  });
-});
+const modal = ref(false);
+const loading = ref(false);
+const editInfo = ref({})
+const postDetail = ref({})
+const dataSource = ref({ items: [], total: 0 });
+const columns = [
+  {
+    title: "标题",
+    dataIndex: ["post", "spec", "title"],
+    key: "title",
+  },
+  {
+    title: "分类",
+    key: "categories",
+  },
+  {
+    title: "发布时间",
+    dataIndex: ["post", "spec", "publishTime"],
+    key: "publishTime",
+  },
+  {
+    title: "操作",
+    key: "action",
+  },
+];
+const searchParams = ref({ keyword: "", page: 1, size: 10 });
+
+function getData() {
+  loading.value = true;
+  getPost(searchParams.value)
+    .then((result) => {
+      console.log("getPost", result);
+      dataSource.value = result;
+    })
+    .finally(() => (loading.value = false));
+}
+
+function onChange(page: number, pageSize: number) {
+  searchParams.value.page = page;
+  searchParams.value.size = pageSize;
+  getData();
+}
+
+async function handleOpenModal(data: any) {
+  modal.value = true;
+  editInfo.value = data;
+  console.log("editInfo", editInfo.value);
+  postDetail.value = await getPostDetail(editInfo.value.post.metadata.name);
+  console.log('postDetail', postDetail.value)
+}
+
+async function handleUpdatePostDetail() {
+  console.log('123', postDetail.value)
+  const res = await updatePostDetail(editInfo.value.post.metadata.name, postDetail.value)
+  // console.log('handleUpdatePostDetail', res)
+}
+
+const drawerTitle = computed(() => {
+  // @ts-ignore
+  return editInfo.value?.post?.spec?.title
+})
+
+getData();
 </script>
 
 <template>
-  <section id="plugin-starter">
-    <div class="wrapper">
-      <span class="title"> 你已经成功运行起了插件！ </span>
-      <span class="message">你可以点击下方文档继续下一步</span>
-      <div class="docs">
-        <a
-          href="https://docs.halo.run/developer-guide/plugin/publish"
-          class="docs__box"
-          target="_blank"
-        >
-          <h2 class="docs__box-title"><RiShareCircleLine />发布一个插件</h2>
-          <span class="docs__box-message">
-            了解如何与我们的社区分享您的扩展。
-          </span>
-          <span class="docs__box-arrow">
-            <RiArrowRightSLine />
-          </span>
-        </a>
-        <a
-          href="https://docs.halo.run/category/%E5%9F%BA%E7%A1%80"
-          class="docs__box"
-          target="_blank"
-        >
-          <h2 class="docs__box-title"><RiComputerLine />基础概览</h2>
-          <span class="docs__box-message">
-            了解插件的项目结构、生命周期、资源配置等。
-          </span>
-          <span class="docs__box-arrow">
-            <RiArrowRightSLine />
-          </span>
-        </a>
-        <a
-          href="https://docs.halo.run/developer-guide/plugin/examples/todolist"
-          class="docs__box group"
-          target="_blank"
-        >
-          <h2 class="docs__box-title"><RiBookReadLine />示例插件</h2>
-          <span class="docs__box-message">帮助你从 0 到 1 完成一个插件。</span>
-          <span class="docs__box-arrow">
-            <RiArrowRightSLine />
-          </span>
-        </a>
-        <a
-          href="https://docs.halo.run/category/api-%E5%8F%82%E8%80%83"
-          class="docs__box"
-          target="_blank"
-        >
-          <h2 class="docs__box-title"><RiCodeBoxLine />API 参考</h2>
-          <span class="docs__box-message">插件中的 API 列表。</span>
-          <span class="docs__box-arrow">
-            <RiArrowRightSLine />
-          </span>
-        </a>
-      </div>
+  <div>
+    <div class="flex items-center justify-between bg-white p-4 h-14">
+      <h2 class="flex items-center truncate text-xl font-bold text-gray-800">
+        产品详情页数据配置
+      </h2>
     </div>
-  </section>
+
+    <div class="m-0 md:m-4">
+      <ConfigProvider :locale="zhCN">
+        <Card>
+          <template #extra>
+            <div class="flex">
+              <Input
+                allow-clear
+                v-model:value="searchParams.keyword"
+                placeholder="请输入关键字搜索"
+              ></Input>
+              <Button class="ml-[10px]" type="primary" @click="getData"
+                >搜索</Button
+              >
+            </div>
+          </template>
+          <Table
+            :dataSource="dataSource.items"
+            :columns="columns"
+            :pagination="false"
+            :loading="loading"
+          >
+            <template #bodyCell="{ column, record }">
+              <template v-if="column.key === 'publishTime'">
+                <template v-if="record.post.spec.publish">
+                  {{
+                    dayjs(record.post.spec.publishTime).format(
+                      "YYYY-MM-DD HH:mm",
+                    )
+                  }}
+                </template>
+                <template v-else> 未发布 </template>
+              </template>
+              <template v-if="column.key === 'categories'">
+                <Tag
+                  color="default"
+                  v-for="(item, index) in record.categories"
+                  :key="index"
+                  >{{ item.spec.displayName }}</Tag
+                >
+              </template>
+              <template v-if="column.key === 'action'">
+                <Button
+                  type="primary"
+                  size="small"
+                  @click="handleOpenModal(record)"
+                  >编辑</Button
+                >
+              </template>
+            </template>
+          </Table>
+
+          <div class="mt-[20px] flex justify-end items-center">
+            <Pagination
+              :show-total="(total: number) => `共 ${total} 条`"
+              :pageSize="searchParams.size"
+              v-model:current="searchParams.page"
+              show-quick-jumper
+              :total="dataSource.total"
+              @change="onChange"
+            />
+          </div>
+        </Card>
+
+        <Drawer
+          v-model:open="modal"
+          :title="drawerTitle"
+          placement="left"
+          width="800px"
+          rootClassName="full-modal"
+          :maskClosable="false"
+        >
+          <template #extra>
+            <Button type="default" class="mr-[8px]">关闭</Button>
+            <Button type="primary" @click="handleUpdatePostDetail">提交</Button>
+          </template>
+
+          <Banner />
+        </Drawer>
+      </ConfigProvider>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-#plugin-starter {
-  height: 100vh;
-  background-color: #f8fafc;
+@import url("../output.css");
+:deep(span[role="img"]) {
+  vertical-align: text-bottom;
 }
 
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  gap: 1.5rem;
+:deep(.ant-btn-primary) {
+  color: #fff;
+  background-color: #1677ff;
+  box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);
+}
 
-  .title {
-    font-weight: 700;
-    font-size: 1.25rem;
-    line-height: 1.75rem;
+:deep(.ant-input) {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 4px 11px;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+  line-height: 1.5714285714285714;
+  list-style: none;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  min-width: 0;
+  background-color: #ffffff;
+  background-image: none;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #d9d9d9;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+:deep(.ant-btn) {
+  font-size: 14px;
+  height: 32px;
+  padding: 4px 15px;
+  border-radius: 6px;
+}
+
+:deep(.ant-btn.ant-btn-sm) {
+  font-size: 14px;
+  height: 24px;
+  padding: 0px 7px;
+  border-radius: 4px;
+}
+
+:deep(.ant-input-affix-wrapper) {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+  min-width: 0;
+  padding: 4px 11px;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 14px;
+  line-height: 1.5714285714285714;
+  background-color: #ffffff;
+  background-image: none;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #d9d9d9;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+</style>
+
+<style lang="scss">
+.full-modal .ant-drawer-content-wrapper {
+  .ant-btn {
+    font-size: 14px;
+    height: 32px;
+    padding: 4px 15px;
+    border-radius: 6px;
   }
 
-  .message {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    color: #4b5563;
+  .ant-btn-default {
+    background-color: #ffffff;
+    border-color: #d9d9d9;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02);
+    border: 1px solid #d9d9d9;
   }
 
-  .docs {
-    display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 1rem;
-    max-width: 48rem;
-
-    .docs__box {
-      background-color: #fff;
-      border-radius: 0.375rem;
-      padding: 0.75rem;
-      transition-property: all;
-      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-      transition-duration: 300ms;
-      cursor: pointer;
-      filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.1))
-        drop-shadow(0 1px 1px rgb(0 0 0 / 0.06));
-
-      &:hover {
-        box-shadow:
-          0 0 0 0px #fff,
-          0 0 0 1px rgb(59 130 246 / 0.5),
-          0 0 #0000;
-      }
-
-      .docs__box-title {
-        display: flex;
-        flex-direction: row;
-        font-size: 1.125rem;
-        line-height: 1.75rem;
-        font-weight: 700;
-        margin-bottom: 2rem;
-        gap: 0.5rem;
-        align-items: center;
-      }
-
-      .docs__box-message {
-        font-size: 0.875rem;
-        line-height: 1.25rem;
-        color: #4b5563;
-      }
-
-      .docs__box-arrow {
-        pointer-events: none;
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-        transition-property: all;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        transition-duration: 150ms;
-        color: #d1d5db;
-      }
-
-      &:hover {
-        .docs__box-arrow {
-          color: #9ca3af;
-          transform: translate(00.375rem, 0) rotate(0) skewX(0) skewY(0)
-            scaleX(1) scaleY(1);
-        }
-      }
-    }
-  }
-
-  @media (min-width: 640px) {
-    .docs {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  .ant-btn-primary {
+    color: #fff;
+    background-color: #1677ff;
+    box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);
   }
 }
 </style>
