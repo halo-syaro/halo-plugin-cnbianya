@@ -24,10 +24,14 @@ import { postDetail } from './postDetail'
 import Banner from "./components/Banner.vue";
 import ProductInfo from "./components/ProductInfo.vue";
 import ScopeOfApplication from "./components/ScopeOfApplication.vue";
+import ProductDescription from "./components/ProductDescription.vue";
+import ProductFeatures from "./components/ProductFeatures.vue";
 
 const bannerRef = ref(null)
 const productInfoRef = ref(null)
 const scopeOfApplicationRef = ref(null)
+const productDescriptionRef = ref(null)
+const productFeaturesRef = ref(null)
 
 const modal = ref(false);
 const loading = ref(false);
@@ -61,7 +65,6 @@ async function getData() {
     .then((result) => {
       dataSource.value = result;
     }).finally(() => loading.value = false)
-    
 }
 
 function onChange(page: number, pageSize: number) {
@@ -82,7 +85,9 @@ async function handleUpdatePostDetail() {
   const obj = {
     banner: JSON.stringify(bannerRef.value.dataSource),
     productInfo: JSON.stringify(productInfoRef.value.data),
-    scopeOfApplication: JSON.stringify(scopeOfApplicationRef.value.data)
+    scopeOfApplication: JSON.stringify(scopeOfApplicationRef.value.data),
+    productDescription: JSON.stringify(productDescriptionRef.value.dataSource),
+    productFeatures: JSON.stringify(productFeaturesRef.value.dataSource)
   }
   postDetail.value.metadata.annotations = {
     ...postDetail.value.metadata.annotations,
@@ -177,7 +182,7 @@ getData();
           v-model:open="modal"
           :title="drawerTitle"
           placement="left"
-          width="800px"
+          width="1000px"
           rootClassName="full-modal"
           :maskClosable="false"
         >
@@ -191,6 +196,8 @@ getData();
             <Banner ref="bannerRef" class="mb-[40px]" />
             <ProductInfo ref="productInfoRef" class="mb-[40px]" />
             <ScopeOfApplication ref="scopeOfApplicationRef" class="mb-[40px]" />
+            <ProductDescription ref="productDescriptionRef" class="mb-[40px]" />
+            <ProductFeatures ref="productFeaturesRef" class="mb-[40px]" />
           </Spin>
         </Drawer>
       </ConfigProvider>
