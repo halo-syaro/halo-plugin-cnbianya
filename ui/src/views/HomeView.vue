@@ -26,12 +26,14 @@ import ProductInfo from "./components/ProductInfo.vue";
 import ScopeOfApplication from "./components/ScopeOfApplication.vue";
 import ProductDescription from "./components/ProductDescription.vue";
 import ProductFeatures from "./components/ProductFeatures.vue";
+import MainParameters from "./components/MainParameters.vue";
 
 const bannerRef = ref(null)
 const productInfoRef = ref(null)
 const scopeOfApplicationRef = ref(null)
 const productDescriptionRef = ref(null)
 const productFeaturesRef = ref(null)
+const mainParametersRef = ref(null)
 
 const modal = ref(false);
 const loading = ref(false);
@@ -87,7 +89,8 @@ async function handleUpdatePostDetail() {
     productInfo: JSON.stringify(productInfoRef.value.data),
     scopeOfApplication: JSON.stringify(scopeOfApplicationRef.value.data),
     productDescription: JSON.stringify(productDescriptionRef.value.dataSource),
-    productFeatures: JSON.stringify(productFeaturesRef.value.dataSource)
+    productFeatures: JSON.stringify(productFeaturesRef.value.dataSource),
+    mainParameters: JSON.stringify(mainParametersRef.value.dataSource)
   }
   postDetail.value.metadata.annotations = {
     ...postDetail.value.metadata.annotations,
@@ -198,6 +201,7 @@ getData();
             <ScopeOfApplication ref="scopeOfApplicationRef" class="mb-[40px]" />
             <ProductDescription ref="productDescriptionRef" class="mb-[40px]" />
             <ProductFeatures ref="productFeaturesRef" class="mb-[40px]" />
+            <MainParameters ref="mainParametersRef" class="mb-[40px]" />
           </Spin>
         </Drawer>
       </ConfigProvider>

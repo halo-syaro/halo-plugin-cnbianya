@@ -6,21 +6,18 @@ import { Table, Button, Input, Divider } from "ant-design-vue";
 import { postDetail } from "../postDetail";
 
 const dataSource = ref([]);
+const imgData = ref([])
+
 const columns = [
   {
-    title: "图片地址",
-    dataIndex: "img",
-    key: "img",
+    title: "参数名",
+    dataIndex: "name",
+    key: "name",
   },
   {
-    title: "标题",
-    dataIndex: "title",
-    key: "title",
-  },
-  {
-    title: "文字描述",
-    dataIndex: "desc",
-    key: "desc",
+    title: "参数值",
+    dataIndex: "value",
+    key: "value",
   },
   {
     title: "操作",
@@ -30,7 +27,7 @@ const columns = [
 ];
 
 function handleAdd() {
-  dataSource.value.push({ img: "", title: "", desc: "", edit: true });
+  dataSource.value.push({ name: "", value: "", edit: true });
 }
 
 function inputBlur(data) {
@@ -66,7 +63,7 @@ defineExpose({ dataSource });
 watch(
   () => postDetail.value,
   (val) => {
-    const data = val.metadata.annotations.productFeatures;
+    const data = val.metadata.annotations.mainParameters;
     dataSource.value = JSON.parse(data || "[]") || [];
   }
 );
@@ -74,43 +71,32 @@ watch(
 
 <template>
   <div>
-    <Title title="产品特点">
+    <Title title="主要参数">
       <Button @click="handleAdd">新增</Button>
     </Title>
     <Table :dataSource="dataSource" :columns="columns" :pagination="false">
       <template #bodyCell="{ column, record, index }">
-        <template v-if="column.key === 'img'">
+        <template v-if="column.key === 'name'">
           <Input
             @focus="inputFocus(record)"
             @blur="inputBlur(record)"
             v-if="record.edit"
             allow-clear
-            v-model:value="record.img"
-            placeholder="请输入图片地址"
+            v-model:value="record.name"
+            placeholder="请输入参数名"
           ></Input>
-          <div v-else>{{ record.img }}</div>
+          <div v-else>{{ record.name }}</div>
         </template>
-        <template v-if="column.key === 'title'">
+        <template v-if="column.key === 'value'">
           <Input
             @focus="inputFocus(record)"
             @blur="inputBlur(record)"
             v-if="record.edit"
             allow-clear
-            v-model:value="record.title"
-            placeholder="请输入标题"
+            v-model:value="record.value"
+            placeholder="请输入参数值"
           ></Input>
-          <div v-else>{{ record.title }}</div>
-        </template>
-        <template v-if="column.key === 'desc'">
-          <Input
-            @focus="inputFocus(record)"
-            @blur="inputBlur(record)"
-            v-if="record.edit"
-            allow-clear
-            v-model:value="record.desc"
-            placeholder="请输入描述"
-          ></Input>
-          <div v-else>{{ record.desc }}</div>
+          <div v-else>{{ record.value }}</div>
         </template>
         <template v-if="column.key === 'action'">
           <Button
@@ -138,5 +124,8 @@ watch(
         </template>
       </template>
     </Table>
+    <div class="mt-[20px]">
+      askdl;akdl;akl;a
+    </div>
   </div>
 </template>
