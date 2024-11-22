@@ -14,16 +14,24 @@ import {
   Drawer,
   Divider,
   Typography,
-  TypographyTitle
+  TypographyTitle,
+  Spin
 } from "ant-design-vue";
 import { getPost, getPostDetail, updatePostDetail } from "@/api/modules/post";
 import zhCN from "ant-design-vue/es/locale/zh_CN";
+import { postDetail } from './postDetail'
+
 import Banner from "./components/Banner.vue";
+import ProductInfo from "./components/ProductInfo.vue";
+import ScopeOfApplication from "./components/ScopeOfApplication.vue";
+
+const bannerRef = ref(null)
+const productInfoRef = ref(null)
+const scopeOfApplicationRef = ref(null)
 
 const modal = ref(false);
 const loading = ref(false);
 const editInfo = ref({})
-const postDetail = ref({})
 const dataSource = ref({ items: [], total: 0 });
 const columns = [
   {
@@ -47,14 +55,13 @@ const columns = [
 ];
 const searchParams = ref({ keyword: "", page: 1, size: 10 });
 
-function getData() {
+async function getData() {
   loading.value = true;
-  getPost(searchParams.value)
+  await getPost(searchParams.value)
     .then((result) => {
-      console.log("getPost", result);
       dataSource.value = result;
-    })
-    .finally(() => (loading.value = false));
+    }).finally(() => loading.value = false)
+    
 }
 
 function onChange(page: number, pageSize: number) {
@@ -65,16 +72,26 @@ function onChange(page: number, pageSize: number) {
 
 async function handleOpenModal(data: any) {
   modal.value = true;
+  loading.value = true;
   editInfo.value = data;
-  console.log("editInfo", editInfo.value);
-  postDetail.value = await getPostDetail(editInfo.value.post.metadata.name);
-  console.log('postDetail', postDetail.value)
+  postDetail.value = await getPostDetail(editInfo.value.post.metadata.name).finally(() => loading.value = false)
 }
 
 async function handleUpdatePostDetail() {
-  console.log('123', postDetail.value)
-  const res = await updatePostDetail(editInfo.value.post.metadata.name, postDetail.value)
-  // console.log('handleUpdatePostDetail', res)
+  loading.value = true
+  const obj = {
+    banner: JSON.stringify(bannerRef.value.dataSource),
+    productInfo: JSON.stringify(productInfoRef.value.data),
+    scopeOfApplication: JSON.stringify(scopeOfApplicationRef.value.data)
+  }
+  postDetail.value.metadata.annotations = {
+    ...postDetail.value.metadata.annotations,
+    ...obj
+  }
+
+  const res = await updatePostDetail(editInfo.value.post.metadata.name, postDetail.value).finally(() => loading.value = false)
+  modal.value = false
+  console.log('updatePostDetail', res)
 }
 
 const drawerTitle = computed(() => {
@@ -166,29 +183,35 @@ getData();
         >
           <template #extra>
             <Button type="default" class="mr-[8px]">关闭</Button>
-            <Button type="primary" @click="handleUpdatePostDetail">提交</Button>
+            <Button type="primary" @click="handleUpdatePostDetail" :loading="loading">提交</Button>
           </template>
 
-          <Banner />
+
+          <Spin :spinning="loading">
+            <Banner ref="bannerRef" class="mb-[40px]" />
+            <ProductInfo ref="productInfoRef" class="mb-[40px]" />
+            <ScopeOfApplication ref="scopeOfApplicationRef" class="mb-[40px]" />
+          </Spin>
         </Drawer>
       </ConfigProvider>
     </div>
   </div>
 </template>
 
-<style lang="scss" scoped>
+
+<style lang="scss">
 @import url("../output.css");
-:deep(span[role="img"]) {
+span[role="img"] {
   vertical-align: text-bottom;
 }
 
-:deep(.ant-btn-primary) {
+.ant-btn-primary {
   color: #fff;
-  background-color: #1677ff;
+  background-color: #1677ff !important;
   box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);
 }
 
-:deep(.ant-input) {
+.ant-input {
   box-sizing: border-box;
   margin: 0;
   padding: 4px 11px;
@@ -212,21 +235,21 @@ getData();
   transition: all 0.2s;
 }
 
-:deep(.ant-btn) {
+.ant-btn {
   font-size: 14px;
   height: 32px;
   padding: 4px 15px;
   border-radius: 6px;
 }
 
-:deep(.ant-btn.ant-btn-sm) {
+.ant-btn.ant-btn-sm {
   font-size: 14px;
   height: 24px;
   padding: 0px 7px;
   border-radius: 4px;
 }
 
-:deep(.ant-input-affix-wrapper) {
+.ant-input-affix-wrapper {
   position: relative;
   display: inline-flex;
   width: 100%;
@@ -243,28 +266,17 @@ getData();
   border-radius: 6px;
   transition: all 0.2s;
 }
-</style>
 
-<style lang="scss">
-.full-modal .ant-drawer-content-wrapper {
-  .ant-btn {
-    font-size: 14px;
-    height: 32px;
-    padding: 4px 15px;
-    border-radius: 6px;
-  }
+.ant-btn-primary.ant-btn-dangerous {
+  background-color: #ff4d4f !important;
+  box-shadow: 0 2px 0 rgba(255, 38, 5, 0.06);
+}
 
-  .ant-btn-default {
-    background-color: #ffffff;
-    border-color: #d9d9d9;
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02);
-    border: 1px solid #d9d9d9;
-  }
-
-  .ant-btn-primary {
-    color: #fff;
-    background-color: #1677ff;
-    box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);
-  }
+.ant-btn-primary:disabled {
+  cursor: not-allowed;
+  border-color: #d9d9d9;
+  color: rgba(0, 0, 0, 0.25);
+  background-color: rgba(0, 0, 0, 0.04) !important;
+  box-shadow: none;
 }
 </style>
