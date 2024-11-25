@@ -1,7 +1,7 @@
 import { get, customFetch, deleteEmpty } from "@/api";
 
 export function getPost(params: any) {
-  return get("/apis/api.console.halo.run/v1alpha1/posts", deleteEmpty(params));
+  return get("/apis/api.console.halo.run/v1alpha1/posts", deleteEmpty({ ...params, labelSelector: "content.halo.run/deleted=false" }));
 }
 
 export function getPostDetail(name: string) {

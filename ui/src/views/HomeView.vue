@@ -75,6 +75,11 @@ async function getData() {
     }).finally(() => loading.value = false)
 }
 
+function handleSearch() {
+  searchParams.value.page = 1
+  getData();
+}
+
 function onChange(page: number, pageSize: number) {
   searchParams.value.page = page;
   searchParams.value.size = pageSize;
@@ -137,7 +142,7 @@ getData();
                 v-model:value="searchParams.keyword"
                 placeholder="请输入关键字搜索"
               ></Input>
-              <Button class="ml-[10px]" type="primary" @click="getData"
+              <Button class="ml-[10px]" type="primary" @click="handleSearch"
                 >搜索</Button
               >
             </div>
@@ -199,7 +204,7 @@ getData();
           :maskClosable="false"
         >
           <template #extra>
-            <Button type="default" class="mr-[8px]">关闭</Button>
+            <Button type="default" class="mr-[8px]" @click="modal = false">关闭</Button>
             <Button type="primary" @click="handleUpdatePostDetail" :loading="loading">提交</Button>
           </template>
 
