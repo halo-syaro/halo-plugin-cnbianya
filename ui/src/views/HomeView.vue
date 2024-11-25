@@ -29,6 +29,7 @@ import ProductFeatures from "./components/ProductFeatures.vue";
 import MainParameters from "./components/MainParameters.vue";
 import MainParametersImage from "./components/MainParametersImage.vue";
 import ImplementationStandards from "./components/ImplementationStandards.vue";
+import TechnicalAdvantages from "./components/TechnicalAdvantages.vue";
 
 const bannerRef = ref(null)
 const productInfoRef = ref(null)
@@ -38,6 +39,7 @@ const productFeaturesRef = ref(null)
 const mainParametersRef = ref(null)
 const mainParametersImageRef = ref(null)
 const implementationStandardsRef = ref(null)
+const technicalAdvantagesRef = ref(null)
 
 const modal = ref(false);
 const loading = ref(false);
@@ -96,7 +98,8 @@ async function handleUpdatePostDetail() {
     productFeatures: JSON.stringify(productFeaturesRef.value.dataSource),
     mainParameters: JSON.stringify(mainParametersRef.value.dataSource),
     mainParametersImage: JSON.stringify(mainParametersImageRef.value.dataSource),
-    implementationStandards: JSON.stringify(implementationStandardsRef.value.dataSource)
+    implementationStandards: JSON.stringify(implementationStandardsRef.value.dataSource),
+    technicalAdvantages: JSON.stringify(technicalAdvantagesRef.value.dataSource)
   }
   postDetail.value.metadata.annotations = {
     ...postDetail.value.metadata.annotations,
@@ -210,6 +213,7 @@ getData();
             <MainParameters ref="mainParametersRef" class="mb-[40px]" />
             <MainParametersImage ref="mainParametersImageRef" class="mb-[40px]" />
             <ImplementationStandards ref="implementationStandardsRef" class="mb-[40px]" />
+            <TechnicalAdvantages ref="technicalAdvantagesRef" />
           </Spin>
         </Drawer>
       </ConfigProvider>
