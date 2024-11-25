@@ -28,6 +28,7 @@ import ProductDescription from "./components/ProductDescription.vue";
 import ProductFeatures from "./components/ProductFeatures.vue";
 import MainParameters from "./components/MainParameters.vue";
 import MainParametersImage from "./components/MainParametersImage.vue";
+import ImplementationStandards from "./components/ImplementationStandards.vue";
 
 const bannerRef = ref(null)
 const productInfoRef = ref(null)
@@ -36,6 +37,7 @@ const productDescriptionRef = ref(null)
 const productFeaturesRef = ref(null)
 const mainParametersRef = ref(null)
 const mainParametersImageRef = ref(null)
+const implementationStandardsRef = ref(null)
 
 const modal = ref(false);
 const loading = ref(false);
@@ -93,7 +95,8 @@ async function handleUpdatePostDetail() {
     productDescription: JSON.stringify(productDescriptionRef.value.dataSource),
     productFeatures: JSON.stringify(productFeaturesRef.value.dataSource),
     mainParameters: JSON.stringify(mainParametersRef.value.dataSource),
-    mainParametersImage: JSON.stringify(mainParametersImageRef.value.dataSource)
+    mainParametersImage: JSON.stringify(mainParametersImageRef.value.dataSource),
+    implementationStandards: JSON.stringify(implementationStandardsRef.value.dataSource)
   }
   postDetail.value.metadata.annotations = {
     ...postDetail.value.metadata.annotations,
@@ -206,6 +209,7 @@ getData();
             <ProductFeatures ref="productFeaturesRef" class="mb-[40px]" />
             <MainParameters ref="mainParametersRef" class="mb-[40px]" />
             <MainParametersImage ref="mainParametersImageRef" class="mb-[40px]" />
+            <ImplementationStandards ref="implementationStandardsRef" class="mb-[40px]" />
           </Spin>
         </Drawer>
       </ConfigProvider>
