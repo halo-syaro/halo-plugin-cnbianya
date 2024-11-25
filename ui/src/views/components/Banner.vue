@@ -4,6 +4,7 @@ import { ref, watch, h } from "vue";
 import Title from "./Title.vue";
 import { Table, Button, Input, Divider } from "ant-design-vue";
 import { postDetail } from "../postDetail";
+import FileInput from "../common/FileInput.vue";
 
 const dataSource = ref([]);
 const columns = [
@@ -20,11 +21,7 @@ const columns = [
 ];
 
 function handleAdd() {
-  dataSource.value.push({ img: "", edit: true });
-}
-
-function inputBlur(data) {
-  data.edit = false;
+  dataSource.value.push({ img: "" });
 }
 
 function handleDel(index) {
@@ -66,24 +63,9 @@ watch(
     <Table :dataSource="dataSource" :columns="columns" :pagination="false">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'img'">
-          <Input
-            @blur="inputBlur(record)"
-            v-if="record.edit"
-            allow-clear
-            v-model:value="record.img"
-            placeholder="请输入图片地址"
-          ></Input>
-          <div v-else>{{ record.img }}</div>
+          <FileInput v-model:url="record.img" />
         </template>
         <template v-if="column.key === 'action'">
-          <Button
-            size="small"
-            class="mr-2"
-            type="primary"
-            :disabled="record.edit"
-            @click="record.edit = true"
-            >编辑</Button
-          >
           <Button size="small" type="primary" danger @click="handleDel(index)"
             >删除</Button
           >
