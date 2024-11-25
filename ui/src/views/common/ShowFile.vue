@@ -1,5 +1,5 @@
 <template>
-  <div class="item">
+  <div class="item" :class="isCurrent ? 'current' : ''">
     <div class="img">
       <img class="w-full h-full object-cover" v-if="isImage" :src="item.status.permalink" />
       <AttachmentFileTypeIcon v-else :fileName="item.spec.displayName" />
@@ -10,11 +10,16 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 const props = defineProps({
-  item: { type: Object, default: () => ({}) }
+  item: { type: Object, default: () => ({}) },
+  currentPermalink: { type: String, default: '' }
 })
 
 const isImage = computed(() => {
   return props.item.spec.mediaType.startsWith('image')
+})
+
+const isCurrent = computed(() => {
+  return props.currentPermalink === props.item.status.permalink
 })
 </script>
 <style scoped lang="scss">
@@ -31,9 +36,9 @@ const isImage = computed(() => {
   cursor: pointer;
   transition: all 0.3s;
   overflow: hidden;
-  &:hover {
-    border-color: #1890ff;
-  }
+  // &:hover {
+  //   border-color: #1890ff;
+  // }
 
   .name {
     background-color: #FFF;
@@ -46,6 +51,10 @@ const isImage = computed(() => {
     height: 90px;
     width: 100%;
     background-color: #f8f8fa
+  }
+
+  &.current {
+    border: 1px solid #1890ff;
   }
 }
 </style>

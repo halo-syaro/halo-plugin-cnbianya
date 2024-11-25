@@ -10,7 +10,7 @@
       <Button style="height: 34px;" @click="handleOpenModal"><FolderOutlined /></Button>
     </InputGroup>
 
-    <ChooseFile ref="chooseFileRef" />
+    <ChooseFile ref="chooseFileRef" @chooseFile="handleChooseFile" />
   </div>
 </template>
 
@@ -26,5 +26,9 @@ const chooseFileRef = ref(null)
 
 function handleOpenModal() {
   if (chooseFileRef.value) chooseFileRef.value.openModal()
+}
+
+function handleChooseFile(url) {
+  value.value = url
 }
 </script>
