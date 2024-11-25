@@ -7,15 +7,16 @@ import { postDetail } from "../postDetail";
 import FileInput from "../common/FileInput.vue";
 
 const dataSource = ref([]);
+const imgData = ref([])
 
 const columns = [
   {
-    title: "参数名",
-    dataIndex: "name",
-    key: "name",
+    title: "图片地址",
+    dataIndex: "img",
+    key: "img",
   },
   {
-    title: "参数值",
+    title: "底部文字",
     dataIndex: "value",
     key: "value",
   },
@@ -27,7 +28,7 @@ const columns = [
 ];
 
 function handleAdd() {
-  dataSource.value.push({ name: "", value: "" });
+  dataSource.value.push({ img: "", value: "" });
 }
 
 
@@ -56,7 +57,7 @@ defineExpose({ dataSource });
 watch(
   () => postDetail.value,
   (val) => {
-    const data = val.metadata.annotations.mainParameters;
+    const data = val.metadata.annotations.mainParametersImage;
     dataSource.value = JSON.parse(data || "[]") || [];
   }
 );
@@ -64,23 +65,19 @@ watch(
 
 <template>
   <div>
-    <Title title="主要参数-数据">
+    <Title title="主要参数-配图">
       <Button @click="handleAdd">新增</Button>
     </Title>
     <Table :dataSource="dataSource" :columns="columns" :pagination="false">
       <template #bodyCell="{ column, record, index }">
-        <template v-if="column.key === 'name'">
-          <Input
-            allow-clear
-            v-model:value="record.name"
-            placeholder="请输入参数名"
-          ></Input>
+        <template v-if="column.key === 'img'">
+          <FileInput v-model:url="record.img"></FileInput>
         </template>
         <template v-if="column.key === 'value'">
           <Input
             allow-clear
             v-model:value="record.value"
-            placeholder="请输入参数值"
+            placeholder="请输入底部文字"
           ></Input>
         </template>
         <template v-if="column.key === 'action'">

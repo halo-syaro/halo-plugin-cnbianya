@@ -25,7 +25,7 @@ const isCurrent = computed(() => {
 <style scoped lang="scss">
 .item {
   width: 100%;
-  height: 100%;
+  // height: 100%;
   border-radius: 5px;
   border: 1px solid #e8e8e8;
   display: flex;

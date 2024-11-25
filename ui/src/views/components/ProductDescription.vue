@@ -20,11 +20,7 @@ const columns = [
 ]
 
 function handleAdd() {
-  dataSource.value.push({ desc: "", edit: true })
-}
-
-function inputBlur(data) {
-  data.edit = false
+  dataSource.value.push({ desc: "" })
 }
 
 function handleDel(index) {
@@ -63,11 +59,9 @@ watch(() => postDetail.value, (val) => {
     <Table :dataSource="dataSource" :columns="columns" :pagination="false">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'desc'">
-          <Input @blur="inputBlur(record)" v-if="record.edit" allow-clear v-model:value="record.desc" placeholder="请输入描述"></Input>
-          <div v-else>{{ record.desc }}</div>
+          <Input allow-clear v-model:value="record.desc" placeholder="请输入描述"></Input>
         </template>
         <template v-if="column.key === 'action'">
-          <Button size="small" class="mr-2" type="primary" :disabled="record.edit" @click="record.edit = true">编辑</Button>
           <Button size="small" type="primary" danger @click="handleDel(index)">删除</Button>
           
           <Divider type="vertical" />

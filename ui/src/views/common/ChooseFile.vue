@@ -6,6 +6,7 @@
       v-model:open="open"
       title="选择文件"
       width="1000px"
+      class="choose-file-modal"
     >
       <Segmented v-model:value="currentGroup" :options="group">
         <template #label="{ payload = {} }">
@@ -14,7 +15,7 @@
       </Segmented>
 
       <Spin :spinning="loading">
-        <div v-if="open" class="grid grid-cols-8 gap-2" style="margin: 10px 0">
+        <div v-if="open" class="grid grid-cols-8 gap-2 overflow-y-auto" style="margin: 10px 0; height: calc(75vh - 100px)">
           <div v-for="item in fileList.items">
             <ShowFile
               @click="handleFileClick(item)"
@@ -60,7 +61,7 @@ import ShowFile from "./ShowFile.vue";
 
 const open = ref(false);
 const page = ref(1);
-const size = ref(60);
+const size = ref(64);
 const loading = ref(false);
 const fileList = ref({ page: page.value, size: size.value, items: [] });
 const currentPermalink = ref("");
@@ -142,7 +143,19 @@ defineExpose({ openModal });
 watch(
   () => currentGroup.value,
   () => {
+    page.value = 1
     handleGetFileList();
   }
 );
 </script>
+
+
+<style lang="scss" scoped>
+.choose-file-modal .ant-spin-nested-loading {
+  height: 90% !important;
+  .ant-spin-container {
+    height: 100% !important;
+    overflow-y: auto;
+  }
+}
+</style>

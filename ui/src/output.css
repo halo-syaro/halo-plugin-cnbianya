@@ -605,6 +605,10 @@ video {
   height: 3.5rem;
 }
 
+.h-\[65vh\] {
+  height: 65vh;
+}
+
 .h-full {
   height: 100%;
 }
@@ -631,6 +635,10 @@ video {
 
 .gap-2 {
   gap: 0.5rem;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
 }
 
 .truncate {

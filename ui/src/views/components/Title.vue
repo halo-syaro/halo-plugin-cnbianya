@@ -1,6 +1,6 @@
 <template>
   <div class="flex justify-between title items-center">
-    <h1>{{ title }}模块</h1>
+    <h1>{{ title }}</h1>
     <slot></slot>
   </div>
 </template>
