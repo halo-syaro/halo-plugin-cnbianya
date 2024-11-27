@@ -129,6 +129,11 @@ const drawerTitle = computed(() => {
   return editInfo.value?.post?.spec?.title
 })
 
+function handleCategoryChange() {
+  searchParams.value.page = 1
+  getData()
+}
+
 getCategory().then((data) => {
   data.items.map(ele => {
     category.value.push({ id: ele.metadata.name, name: ele.spec.displayName, postCount: ele.postCount })
@@ -151,7 +156,7 @@ getData();
         <Card>
           <template #extra>
             <div class="flex items-center">
-              <Select @change="getData" allow-clear size="default" v-model:value="categoryId" style="width: 350px; margin-right: 20px" placeholder="筛选分类">
+              <Select @change="handleCategoryChange" allow-clear size="default" v-model:value="categoryId" style="width: 350px; margin-right: 20px" placeholder="筛选分类">
                 <SelectOption v-for="item in category" :key="item.id" :value="item.id">{{ item.name }}({{ item.postCount }}篇)</SelectOption>
               </Select>
               <Input
