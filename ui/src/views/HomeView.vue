@@ -76,7 +76,11 @@ const searchParams = ref({ keyword: "", page: 1, size: 10 });
 async function getData() {
   loading.value = true;
   const obj = searchParams.value
-  if (categoryId.value) obj.fieldSelector = `spec.categories=${categoryId.value}`
+  if (categoryId.value) {
+    obj.fieldSelector = `spec.categories=${categoryId.value}`
+  } else {
+    delete obj.fieldSelector
+  }
   await getPost(obj)
     .then((result) => {
       dataSource.value = result;
