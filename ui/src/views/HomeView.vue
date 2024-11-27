@@ -150,9 +150,8 @@ getCategory().then((data) => {
     const item = data.items.find(i => i.metadata.name === ele)
     category.value.push({ id: item.metadata.name, name: item.spec.displayName, postCount: item.postCount })
   })
+  getData()
 })
-
-getData();
 </script>
 
 <template>
