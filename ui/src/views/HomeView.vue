@@ -15,11 +15,15 @@ import {
   Divider,
   Typography,
   TypographyTitle,
-  Spin
+  Spin,
+  Select,
+  SelectOption
 } from "ant-design-vue";
 import { getPost, getPostDetail, updatePostDetail } from "@/api/modules/post";
+import { getCategory } from "@/api/modules/categories";
 import zhCN from "ant-design-vue/es/locale/zh_CN";
 import { postDetail } from './postDetail'
+import { LinkOutlined } from '@ant-design/icons-vue'
 
 import Banner from "./components/Banner.vue";
 import ProductInfo from "./components/ProductInfo.vue";
@@ -45,6 +49,8 @@ const modal = ref(false);
 const loading = ref(false);
 const editInfo = ref({})
 const dataSource = ref({ items: [], total: 0 });
+const category = ref([])
+const categoryId = ref(null)
 const columns = [
   {
     title: "标题",
@@ -69,7 +75,9 @@ const searchParams = ref({ keyword: "", page: 1, size: 10 });
 
 async function getData() {
   loading.value = true;
-  await getPost(searchParams.value)
+  const obj = searchParams.value
+  if (categoryId.value) obj.fieldSelector = `spec.categories=${categoryId.value}`
+  await getPost(obj)
     .then((result) => {
       dataSource.value = result;
     }).finally(() => loading.value = false)
@@ -121,6 +129,12 @@ const drawerTitle = computed(() => {
   return editInfo.value?.post?.spec?.title
 })
 
+getCategory().then((data) => {
+  data.items.map(ele => {
+    category.value.push({ id: ele.metadata.name, name: ele.spec.displayName, postCount: ele.postCount })
+  })
+})
+
 getData();
 </script>
 
@@ -136,9 +150,13 @@ getData();
       <ConfigProvider :locale="zhCN">
         <Card>
           <template #extra>
-            <div class="flex">
+            <div class="flex items-center">
+              <Select @change="getData" allow-clear size="default" v-model:value="categoryId" style="width: 350px; margin-right: 20px" placeholder="筛选分类">
+                <SelectOption v-for="item in category" :key="item.id" :value="item.id">{{ item.name }}({{ item.postCount }}篇)</SelectOption>
+              </Select>
               <Input
                 allow-clear
+                size="default"
                 v-model:value="searchParams.keyword"
                 placeholder="请输入关键字搜索"
               ></Input>
@@ -154,6 +172,10 @@ getData();
             :loading="loading"
           >
             <template #bodyCell="{ column, record }">
+              <template v-if="column.key === 'title'">
+                {{ record.post.spec.title }}
+                <a target="_blank" :href="record.post.status.permalink"><LinkOutlined /></a>
+              </template>
               <template v-if="column.key === 'publishTime'">
                 <template v-if="record.post.spec.publish">
                   {{
