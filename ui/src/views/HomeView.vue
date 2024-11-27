@@ -35,6 +35,8 @@ import MainParametersImage from "./components/MainParametersImage.vue";
 import ImplementationStandards from "./components/ImplementationStandards.vue";
 import TechnicalAdvantages from "./components/TechnicalAdvantages.vue";
 
+const cpzxid = "category-NLNKo"
+
 const bannerRef = ref(null)
 const productInfoRef = ref(null)
 const scopeOfApplicationRef = ref(null)
@@ -139,8 +141,14 @@ function handleCategoryChange() {
 }
 
 getCategory().then((data) => {
-  data.items.map(ele => {
-    category.value.push({ id: ele.metadata.name, name: ele.spec.displayName, postCount: ele.postCount })
+  category.value = [{ id: cpzxid, name: "全部产品" }]
+  categoryId.value = cpzxid
+  const find = data.items.find(ele => ele.metadata.name === cpzxid)
+  if (!find) return
+  const ids = find.spec.children
+  ids.map(ele => {
+    const item = data.items.find(i => i.metadata.name === ele)
+    category.value.push({ id: item.metadata.name, name: item.spec.displayName, postCount: item.postCount })
   })
 })
 
@@ -160,8 +168,10 @@ getData();
         <Card>
           <template #extra>
             <div class="flex items-center">
-              <Select @change="handleCategoryChange" allow-clear size="default" v-model:value="categoryId" style="width: 350px; margin-right: 20px" placeholder="筛选分类">
-                <SelectOption v-for="item in category" :key="item.id" :value="item.id">{{ item.name }}({{ item.postCount }}篇)</SelectOption>
+              <Select @change="handleCategoryChange" size="default" v-model:value="categoryId" style="width: 350px; margin-right: 20px" placeholder="筛选分类">
+                <SelectOption v-for="item in category" :key="item.id" :value="item.id">
+                  {{ item.name }} <template v-if="item.postCount">({{ item.postCount }}篇)</template>
+                </SelectOption>
               </Select>
               <Input
                 allow-clear
