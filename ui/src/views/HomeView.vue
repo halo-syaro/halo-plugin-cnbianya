@@ -25,6 +25,7 @@ import zhCN from "ant-design-vue/es/locale/zh_CN";
 import { postDetail } from './postDetail'
 import { LinkOutlined } from '@ant-design/icons-vue'
 
+import Features from "./components/Features.vue";
 import Banner from "./components/Banner.vue";
 import ProductInfo from "./components/ProductInfo.vue";
 import ScopeOfApplication from "./components/ScopeOfApplication.vue";
@@ -37,6 +38,7 @@ import TechnicalAdvantages from "./components/TechnicalAdvantages.vue";
 
 const cpzxid = "category-NLNKo"
 
+const featuresRef = ref(null)
 const bannerRef = ref(null)
 const productInfoRef = ref(null)
 const scopeOfApplicationRef = ref(null)
@@ -110,6 +112,7 @@ async function handleOpenModal(data: any) {
 async function handleUpdatePostDetail() {
   loading.value = true
   const obj = {
+    features: JSON.stringify(featuresRef.value.dataSource),
     banner: JSON.stringify(bannerRef.value.dataSource),
     productInfo: JSON.stringify(productInfoRef.value.data),
     scopeOfApplication: JSON.stringify(scopeOfApplicationRef.value.data),
@@ -250,6 +253,7 @@ getCategory().then((data) => {
 
 
           <Spin :spinning="loading">
+            <Features ref="featuresRef" class="mb-[40px]" />
             <Banner ref="bannerRef" class="mb-[40px]" />
             <ProductInfo ref="productInfoRef" class="mb-[40px]" />
             <ScopeOfApplication ref="scopeOfApplicationRef" class="mb-[40px]" />
