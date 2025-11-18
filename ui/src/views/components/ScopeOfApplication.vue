@@ -1,28 +1,99 @@
 <script setup lang="ts">
 // @ts-nocheck
-import { ref, watch } from 'vue'
-import Title from './Title.vue';
-import { Table, Button, Input, Textarea, Form, FormItem } from "ant-design-vue";
-import { postDetail } from '../postDetail'
+import { ref, watch, h } from "vue";
+import Title from "./Title.vue";
+import { Table, Button, Input, Divider } from "ant-design-vue";
+import { postDetail } from "../postDetail";
+import FileInput from "../common/FileInput.vue";
 
-const data = ref({ desc: "" })
+const dataSource = ref([]);
+const columns = [
+  {
+    title: "图片地址",
+    dataIndex: "img",
+    key: "img",
+  },
+  {
+    title: "标题",
+    dataIndex: "title",
+    key: "title",
+  },
+  {
+    title: "操作",
+    key: "action",
+    width: 280,
+  },
+];
 
-watch(() => postDetail.value, (val) => {
-  const info = val.metadata.annotations.scopeOfApplication
-  data.value = JSON.parse(info || '{}') || {}
-})
+function handleAdd() {
+  dataSource.value.push({ img: "", title: "" });
+}
 
+function handleDel(index) {
+  dataSource.value.splice(index, 1);
+}
 
-defineExpose({ data })
+function handleMoveUp(index) {
+  if (index > 0) {
+    const temp = dataSource.value[index];
+    dataSource.value[index] = dataSource.value[index - 1];
+    dataSource.value[index - 1] = temp;
+  }
+}
+
+function handleMoveDown(index) {
+  if (index < dataSource.value.length - 1) {
+    const temp = dataSource.value[index];
+    dataSource.value[index] = dataSource.value[index + 1];
+    dataSource.value[index + 1] = temp;
+  }
+}
+
+defineExpose({ dataSource });
+
+watch(
+  () => postDetail.value,
+  (val) => {
+    const data = val.metadata.annotations.scopeOfApplicationList;
+    dataSource.value = JSON.parse(data || "[]") || [];
+  }
+);
 </script>
 
 <template>
   <div>
-    <Title title="适用范围"></Title>
-    <Form layout="vertical">
-      <FormItem label="文字描述">
-        <Textarea v-model:value="data.desc" placeholder="请输入适用范围文字描述" allow-clear :auto-size="{ minRows: 2, maxRows: 5 }"></Textarea>
-      </FormItem>
-    </Form>
+    <Title title="适用范围">
+      <Button @click="handleAdd">新增</Button>
+    </Title>
+    <Table :dataSource="dataSource" :columns="columns" :pagination="false">
+      <template #bodyCell="{ column, record, index }">
+        <template v-if="column.key === 'img'">
+          <FileInput v-model:url="record.img"</FileInput>
+        </template>
+        <template v-if="column.key === 'title'">
+          <Input
+            allow-clear
+            v-model:value="record.title"
+            placeholder="请输入标题"
+          ></Input>
+        </template>
+        <template v-if="column.key === 'action'">
+          <Button size="small" type="primary" danger @click="handleDel(index)"
+          >删除</Button
+          >
+
+          <Divider type="vertical" />
+
+          <Button
+            size="small"
+            class="mr-2"
+            @click="handleMoveUp(index)"
+            :disabled="index === 0"
+          >上移</Button
+          >
+          <Button @click="handleMoveDown(index)" size="small" :disabled="index === dataSource.length - 1">下移</Button>
+        </template>
+      </template>
+    </Table>
   </div>
 </template>

@@ -115,7 +115,7 @@ async function handleUpdatePostDetail() {
     features: JSON.stringify(featuresRef.value.dataSource),
     banner: JSON.stringify(bannerRef.value.dataSource),
     productInfo: JSON.stringify(productInfoRef.value.data),
-    scopeOfApplication: JSON.stringify(scopeOfApplicationRef.value.data),
+    scopeOfApplicationList: JSON.stringify(scopeOfApplicationRef.value.dataSource),
     productDescription: JSON.stringify(productDescriptionRef.value.dataSource),
     productFeatures: JSON.stringify(productFeaturesRef.value.dataSource),
     mainParameters: JSON.stringify(mainParametersRef.value.dataSource),
