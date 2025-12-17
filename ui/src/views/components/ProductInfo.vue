@@ -6,7 +6,7 @@ import { Table, Button, Input, Textarea, Form, FormItem } from "ant-design-vue";
 import { postDetail } from '../postDetail'
 import FileInput from '../common/FileInput.vue';
 
-const data = ref({ desc: "", img: "" })
+const data = ref({ title1: "", title2: "", desc: "", img: "" })
 
 watch(() => postDetail.value, (val) => {
   const info = val.metadata.annotations.productInfo
@@ -20,6 +20,14 @@ defineExpose({ data })
 <template>
   <div>
     <Title title="产品介绍"></Title>
+    <div class="flex gap-4">
+      <FormItem label="前标题">
+        <Input allow-clear v-model:value="data.title1" placeholder="前标题" />
+      </FormItem>
+      <FormItem label="后标题">
+        <Input allow-clear v-model:value="data.title2" placeholder="后标题" />
+      </FormItem>
+    </div>
     <Form layout="vertical">
       <FormItem label="文字描述">
         <Textarea v-model:value="data.desc" placeholder="请输入产品介绍文字描述" allow-clear :auto-size="{ minRows: 2, maxRows: 5 }"></Textarea>
