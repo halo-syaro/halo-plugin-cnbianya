@@ -19,6 +19,11 @@ const columns = [
     key: "title",
   },
   {
+    title: "详情",
+    dataIndex: "desc",
+    key: "desc",
+  },
+  {
     title: "操作",
     key: "action",
     width: 280,
@@ -26,7 +31,7 @@ const columns = [
 ];
 
 function handleAdd() {
-  dataSource.value.push({ img: "", title: "" });
+  dataSource.value.push({ img: "", title: "", desc: "" });
 }
 
 function handleDel(index) {
@@ -68,13 +73,20 @@ watch(
     <Table :dataSource="dataSource" :columns="columns" :pagination="false">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'img'">
-          <FileInput v-model:url="record.img"</FileInput>
+          <FileInput v-model:url="record.img"></FileInput>
         </template>
         <template v-if="column.key === 'title'">
           <Input
             allow-clear
             v-model:value="record.title"
             placeholder="请输入标题"
+          ></Input>
+        </template>
+        <template v-if="column.key === 'desc'">
+          <Input
+            allow-clear
+            v-model:value="record.desc"
+            placeholder="请输入详情"
           ></Input>
         </template>
         <template v-if="column.key === 'action'">

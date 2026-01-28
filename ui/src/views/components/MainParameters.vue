@@ -20,6 +20,11 @@ const columns = [
     key: "value",
   },
   {
+    title: "图片",
+    dataIndex: "img",
+    key: "img",
+  },
+  {
     title: "操作",
     key: "action",
     width: 280,
@@ -27,7 +32,7 @@ const columns = [
 ];
 
 function handleAdd() {
-  dataSource.value.push({ name: "", value: "" });
+  dataSource.value.push({ name: "", value: "", img: "" });
 }
 
 
@@ -64,7 +69,7 @@ watch(
 
 <template>
   <div>
-    <Title title="主要参数-数据">
+    <Title title="主要参数">
       <Button @click="handleAdd">新增</Button>
     </Title>
     <Table :dataSource="dataSource" :columns="columns" :pagination="false">
@@ -82,6 +87,9 @@ watch(
             v-model:value="record.value"
             placeholder="请输入参数值"
           ></Input>
+        </template>
+        <template v-if="column.key === 'img'">
+          <FileInput v-model:url="record.img"></FileInput>
         </template>
         <template v-if="column.key === 'action'">
           <Button size="small" type="primary" danger @click="handleDel(index)"

@@ -9,9 +9,14 @@ import FileInput from "../common/FileInput.vue";
 const dataSource = ref([]);
 const columns = [
   {
-    title: "图片地址",
+    title: "大图",
     dataIndex: "img",
     key: "img",
+  },
+  {
+    title: "小图",
+    dataIndex: "thumbnail",
+    key: "thumbnail",
   },
   {
     title: "操作",
@@ -21,7 +26,7 @@ const columns = [
 ];
 
 function handleAdd() {
-  dataSource.value.push({ img: "" });
+  dataSource.value.push({ img: "", thumbnail: "" });
 }
 
 function handleDel(index) {
@@ -64,6 +69,9 @@ watch(
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'img'">
           <FileInput v-model:url="record.img" />
+        </template>
+        <template v-if="column.key === 'thumbnail'">
+          <FileInput v-model:url="record.thumbnail" />
         </template>
         <template v-if="column.key === 'action'">
           <Button size="small" type="primary" danger @click="handleDel(index)"

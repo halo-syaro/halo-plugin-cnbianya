@@ -4,6 +4,7 @@ import { ref, watch, h } from 'vue'
 import Title from './Title.vue';
 import { Table, Button, Input, Divider } from "ant-design-vue";
 import { postDetail } from '../postDetail'
+import FileInput from "../common/FileInput.vue";
 
 const dataSource = ref([])
 const columns = [
@@ -13,6 +14,11 @@ const columns = [
     key: 'desc',
   },
   {
+    title: '图标',
+    dataIndex: 'icon',
+    key: 'icon',
+  },
+  {
     title: '操作',
     key: 'action',
     width: 280,
@@ -20,7 +26,7 @@ const columns = [
 ]
 
 function handleAdd() {
-  dataSource.value.push({ desc: "" })
+  dataSource.value.push({ desc: "", icon: "" })
 }
 
 function handleDel(index) {
@@ -60,6 +66,9 @@ watch(() => postDetail.value, (val) => {
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'desc'">
           <Input allow-clear v-model:value="record.desc" placeholder="请输入描述"></Input>
+        </template>
+        <template v-if="column.key === 'icon'">
+          <FileInput v-model:url="record.img"></FileInput>
         </template>
         <template v-if="column.key === 'action'">
           <Button size="small" type="primary" danger @click="handleDel(index)">删除</Button>

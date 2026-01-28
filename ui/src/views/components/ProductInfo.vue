@@ -32,10 +32,9 @@ defineExpose({ data })
       <FormItem label="文字描述">
         <Textarea v-model:value="data.desc" placeholder="请输入产品介绍文字描述" allow-clear :auto-size="{ minRows: 2, maxRows: 5 }"></Textarea>
       </FormItem>
-      <FormItem label="图片地址">
-        <!-- <Input v-model:value="data.img" placeholder="请输入图片地址" allow-clear></Input> -->
+      <!-- <FormItem label="图片地址">
         <FileInput v-model:url="data.img" />
-      </FormItem>
+      </FormItem> -->
     </Form>
   </div>
 </template>

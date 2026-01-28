@@ -25,6 +25,7 @@ import zhCN from "ant-design-vue/es/locale/zh_CN";
 import { postDetail } from './postDetail'
 import { LinkOutlined } from '@ant-design/icons-vue'
 
+import HeaderImage from "./components/HeaderImage.vue";
 import Features from "./components/Features.vue";
 import Banner from "./components/Banner.vue";
 import ProductInfo from "./components/ProductInfo.vue";
@@ -38,6 +39,7 @@ import TechnicalAdvantages from "./components/TechnicalAdvantages.vue";
 
 const cpzxid = "category-NLNKo"
 
+const headerImageRef = ref(null)
 const featuresRef = ref(null)
 const bannerRef = ref(null)
 const productInfoRef = ref(null)
@@ -112,6 +114,7 @@ async function handleOpenModal(data: any) {
 async function handleUpdatePostDetail() {
   loading.value = true
   const obj = {
+    headerImage: JSON.stringify(headerImageRef.value.data),
     features: JSON.stringify(featuresRef.value.dataSource),
     banner: JSON.stringify(bannerRef.value.dataSource),
     productInfo: JSON.stringify(productInfoRef.value.data),
@@ -253,14 +256,15 @@ getCategory().then((data) => {
 
 
           <Spin :spinning="loading">
-            <Features ref="featuresRef" class="mb-[40px]" />
+            <HeaderImage ref="headerImageRef" class="mb-[40px]" />
+            <Features ref="featuresRef" class="mb-[40px] hidden" />
             <Banner ref="bannerRef" class="mb-[40px]" />
             <ProductInfo ref="productInfoRef" class="mb-[40px]" />
             <ScopeOfApplication ref="scopeOfApplicationRef" class="mb-[40px]" />
             <ProductDescription ref="productDescriptionRef" class="mb-[40px]" />
             <ProductFeatures ref="productFeaturesRef" class="mb-[40px]" />
             <MainParameters ref="mainParametersRef" class="mb-[40px]" />
-            <MainParametersImage ref="mainParametersImageRef" class="mb-[40px]" />
+            <MainParametersImage ref="mainParametersImageRef" class="mb-[40px] hidden" />
             <ImplementationStandards ref="implementationStandardsRef" class="mb-[40px]" />
             <TechnicalAdvantages ref="technicalAdvantagesRef" />
           </Spin>
