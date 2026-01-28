@@ -73,7 +73,7 @@ watch(
     <Table :dataSource="dataSource" :columns="columns" :pagination="false">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'img'">
-          <FileInput v-model:url="record.img"</FileInput>
+          <FileInput v-model:url="record.img"></FileInput>
         </template>
         <template v-if="column.key === 'title'">
           <Input

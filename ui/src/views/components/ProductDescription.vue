@@ -15,8 +15,8 @@ const columns = [
   },
   {
     title: '图标',
-    dataIndex: 'icon',
-    key: 'icon',
+    dataIndex: 'img',
+    key: 'img',
   },
   {
     title: '操作',
@@ -26,7 +26,7 @@ const columns = [
 ]
 
 function handleAdd() {
-  dataSource.value.push({ desc: "", icon: "" })
+  dataSource.value.push({ desc: "", img: "" })
 }
 
 function handleDel(index) {
@@ -67,7 +67,7 @@ watch(() => postDetail.value, (val) => {
         <template v-if="column.key === 'desc'">
           <Input allow-clear v-model:value="record.desc" placeholder="请输入描述"></Input>
         </template>
-        <template v-if="column.key === 'icon'">
+        <template v-if="column.key === 'img'">
           <FileInput v-model:url="record.img"></FileInput>
         </template>
         <template v-if="column.key === 'action'">
