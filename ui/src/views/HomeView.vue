@@ -109,6 +109,9 @@ async function handleOpenModal(data: any) {
   loading.value = true;
   editInfo.value = data;
   postDetail.value = await getPostDetail(editInfo.value.post.metadata.name).finally(() => loading.value = false)
+  if (!postDetail.value.metadata.annotations.directClass) {
+    Modal.warning({ title: '警告', content: '该产品未配置直属分类! 请先至 文章中配置该产品的直属分类!' })
+  }
 }
 
 async function handleUpdatePostDetail() {
