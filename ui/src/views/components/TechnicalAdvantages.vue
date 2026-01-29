@@ -67,13 +67,13 @@ watch(
 
 <template>
   <div>
-    <Title title="技术优势">
+    <Title title="技术优势" tip="最佳3条数据" :tipType="1">
       <Button @click="handleAdd">新增</Button>
     </Title>
     <Table :dataSource="dataSource" :columns="columns" :pagination="false">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.key === 'img'">
-          <FileInput v-model:url="record.img"</FileInput>
+          <FileInput v-model:url="record.img"></FileInput>
         </template>
         <template v-if="column.key === 'title'">
           <Input

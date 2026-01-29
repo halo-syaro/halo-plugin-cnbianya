@@ -112,6 +112,63 @@ async function handleOpenModal(data: any) {
 }
 
 async function handleUpdatePostDetail() {
+  // 规则校验
+  if (bannerRef.value.dataSource.length < 3) {
+    Modal.error({ title: '轮播图 模块错误', content: '数量必须大于3' })
+    return
+  }
+  if (bannerRef.value.dataSource.some(ele => !ele.img || !ele.thumbnail)) {
+    Modal.error({ title: '轮播图 模块错误', content: '大图和小图不能为空' })
+    return
+  }
+  if (!scopeOfApplicationRef.value.dataSource.length) {
+    Modal.error({ title: '适用范围 模块错误', content: '数量必须大于0' })
+    return
+  }
+  if (scopeOfApplicationRef.value.dataSource.some(ele => !ele.title || !ele.desc || !ele.img)) {
+    Modal.error({ title: '适用范围 模块错误', content: '标题、详情和图片不能为空' })
+    return
+  }
+  if (!productDescriptionRef.value.dataSource.length) {
+    Modal.error({ title: '产品说明 模块错误', content: '数量必须大于0' })
+    return
+  }
+  if (productDescriptionRef.value.dataSource.some(ele => !ele.desc || !ele.img)) {
+    Modal.error({ title: '产品说明 模块错误', content: '文字描述和图标不能为空' })
+    return
+  }
+  if (productFeaturesRef.value.dataSource.length !== 6) {
+    Modal.error({ title: '产品特点 模块错误', content: '数量必须等于6' })
+    return
+  }
+  if (productFeaturesRef.value.dataSource.some(ele => !ele.title || !ele.desc || !ele.img)) {
+    Modal.error({ title: '产品特点 模块错误', content: '标题、详情和图片不能为空' })
+    return
+  }
+  if (!mainParametersRef.value.dataSource.length) {
+    Modal.error({ title: '主要参数 模块错误', content: '数量必须大于0' })
+    return
+  }
+  if (mainParametersRef.value.dataSource.some(ele => !ele.name || !ele.value || !ele.img)) {
+    Modal.error({ title: '主要参数 模块错误', content: '名称、值和图片不能为空' })
+    return
+  }
+  if (!implementationStandardsRef.value.dataSource.length) {
+    Modal.error({ title: '执行标准 模块错误', content: '数量必须大于0' })
+    return
+  }
+  if (implementationStandardsRef.value.dataSource.some(ele => !ele.id || !ele.name)) {
+    Modal.error({ title: '执行标准 模块错误', content: '编号和名称不能为空' })
+    return
+  }
+  if (!technicalAdvantagesRef.value.dataSource.length) {
+    Modal.error({ title: '技术优势 模块错误', content: '数量必须大于0' })
+    return
+  }
+  if (technicalAdvantagesRef.value.dataSource.some(ele => !ele.img || !ele.title || !ele.desc)) {
+    Modal.error({ title: '技术优势 模块错误', content: '图片、标题和文字描述不能为空' })
+    return
+  }
   loading.value = true
   const obj = {
     headerImage: JSON.stringify(headerImageRef.value.data),

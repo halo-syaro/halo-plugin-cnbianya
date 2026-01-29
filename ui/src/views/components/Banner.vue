@@ -62,7 +62,7 @@ watch(
 
 <template>
   <div>
-    <Title title="轮播图">
+    <Title title="轮播图" tip="至少3条数据">
       <Button @click="handleAdd">新增</Button>
     </Title>
     <Table :dataSource="dataSource" :columns="columns" :pagination="false">

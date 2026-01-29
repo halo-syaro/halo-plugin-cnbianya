@@ -59,7 +59,7 @@ watch(() => postDetail.value, (val) => {
 
 <template>
   <div>
-    <Title title="产品说明">
+    <Title title="产品说明" tip="最佳6条数据" :tipType="1">
       <Button @click="handleAdd">新增</Button>
     </Title>
     <Table :dataSource="dataSource" :columns="columns" :pagination="false">

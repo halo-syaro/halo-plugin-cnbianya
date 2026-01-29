@@ -67,7 +67,7 @@ watch(
 
 <template>
   <div>
-    <Title title="产品特点">
+    <Title title="产品特点" tip="6条数据">
       <Button @click="handleAdd">新增</Button>
     </Title>
     <Table :dataSource="dataSource" :columns="columns" :pagination="false">

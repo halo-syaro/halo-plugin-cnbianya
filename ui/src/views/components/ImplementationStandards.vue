@@ -64,7 +64,7 @@ watch(
 
 <template>
   <div>
-    <Title title="执行标准">
+    <Title title="执行标准" tip="最佳4条数据" :tipType="1">
       <Button @click="handleAdd">新增</Button>
     </Title>
     <Table :dataSource="dataSource" :columns="columns" :pagination="false">

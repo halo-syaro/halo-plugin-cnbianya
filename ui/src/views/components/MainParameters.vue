@@ -69,7 +69,7 @@ watch(
 
 <template>
   <div>
-    <Title title="主要参数">
+    <Title title="主要参数" tip="最佳4条数据" :tipType="1">
       <Button @click="handleAdd">新增</Button>
     </Title>
     <Table :dataSource="dataSource" :columns="columns" :pagination="false">
