@@ -10,7 +10,14 @@ const data = ref({ title1: "", title2: "", desc: "", img: "" })
 
 watch(() => postDetail.value, (val) => {
   const info = val.metadata.annotations.productInfo
-  data.value = JSON.parse(info || '{}') || {}
+  if (info) {
+    const infoObj = JSON.parse(info || '{}') || {}
+    for (const key in infoObj) {
+      if (infoObj.hasOwnProperty(key)) {
+        data.value[key] = infoObj[key]
+      }
+    }
+  }
 })
 
 
