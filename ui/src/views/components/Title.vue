@@ -22,6 +22,7 @@ const tagColorMap = {
   1: "#1677ff"
 }
 
+// @ts-ignore
 const tagColor = computed(() => tagColorMap[props.tipType])
 </script>
 
