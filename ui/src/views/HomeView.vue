@@ -25,6 +25,7 @@ import zhCN from "ant-design-vue/es/locale/zh_CN";
 import { postDetail } from './postDetail'
 import { LinkOutlined } from '@ant-design/icons-vue'
 
+import Rank from "./components/Rank.vue";
 import HeaderImage from "./components/HeaderImage.vue";
 import Features from "./components/Features.vue";
 import Banner from "./components/Banner.vue";
@@ -39,6 +40,7 @@ import TechnicalAdvantages from "./components/TechnicalAdvantages.vue";
 
 const cpzxid = "category-NLNKo"
 
+const rankRef = ref(null)
 const headerImageRef = ref(null)
 const featuresRef = ref(null)
 const bannerRef = ref(null)
@@ -174,6 +176,7 @@ async function handleUpdatePostDetail() {
   }
   loading.value = true
   const obj = {
+    rankMap: JSON.stringify(rankRef.value.generateSubmitMap()),
     headerImage: JSON.stringify(headerImageRef.value.data),
     features: JSON.stringify(featuresRef.value.dataSource),
     banner: JSON.stringify(bannerRef.value.dataSource),
@@ -188,7 +191,8 @@ async function handleUpdatePostDetail() {
   }
   postDetail.value.metadata.annotations = {
     ...postDetail.value.metadata.annotations,
-    ...obj
+    ...obj,
+    rank: rankRef.value.generateSubmitMap()[cpzxid] || null,
   }
 
   const res = await updatePostDetail(editInfo.value.post.metadata.name, postDetail.value).finally(() => loading.value = false)
@@ -316,6 +320,7 @@ getCategory().then((data) => {
 
 
           <Spin :spinning="loading">
+            <Rank ref="rankRef" class="mb-[40px]" :category="category" :cpzxid="cpzxid" />
             <HeaderImage ref="headerImageRef" class="mb-[40px]" />
             <Features ref="featuresRef" class="mb-[40px] hidden" />
             <Banner ref="bannerRef" class="mb-[40px]" />
