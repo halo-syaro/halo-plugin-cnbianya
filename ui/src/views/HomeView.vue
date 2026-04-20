@@ -175,8 +175,9 @@ async function handleUpdatePostDetail() {
     return
   }
   loading.value = true
+  const rankMap = rankRef.value.generateSubmitMap()
   const obj = {
-    rankMap: JSON.stringify(rankRef.value.generateSubmitMap()),
+    rankMap: JSON.stringify(rankMap),
     headerImage: JSON.stringify(headerImageRef.value.data),
     features: JSON.stringify(featuresRef.value.dataSource),
     banner: JSON.stringify(bannerRef.value.dataSource),
@@ -192,8 +193,12 @@ async function handleUpdatePostDetail() {
   postDetail.value.metadata.annotations = {
     ...postDetail.value.metadata.annotations,
     ...obj,
-    rank: rankRef.value.generateSubmitMap()[cpzxid] || null,
+    rank: rankMap[cpzxid] || null,
   }
+  Object.keys(rankMap).forEach(key => {
+    console.log(key, rankMap[key])
+    postDetail.value.metadata.annotations[`rank-${key}`] = rankMap[key]
+  })
 
   const res = await updatePostDetail(editInfo.value.post.metadata.name, postDetail.value).finally(() => loading.value = false)
   modal.value = false
