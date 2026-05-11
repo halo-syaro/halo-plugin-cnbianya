@@ -24,6 +24,11 @@ const columns = [
     key: "desc",
   },
   {
+    title: "图片Alt",
+    dataIndex: "alt",
+    key: "alt",
+  },
+  {
     title: "操作",
     key: "action",
     width: 280,
@@ -31,7 +36,7 @@ const columns = [
 ];
 
 function handleAdd() {
-  dataSource.value.push({ img: "", title: "", desc: "" });
+  dataSource.value.push({ img: "", title: "", desc: "", alt: "" });
 }
 
 function handleDel(index) {
@@ -87,6 +92,13 @@ watch(
             allow-clear
             v-model:value="record.desc"
             placeholder="请输入详情"
+          ></Input>
+        </template>
+        <template v-if="column.key === 'alt'">
+          <Input
+            allow-clear
+            v-model:value="record.alt"
+            placeholder="请输入图片Alt"
           ></Input>
         </template>
         <template v-if="column.key === 'action'">

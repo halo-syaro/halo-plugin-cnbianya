@@ -19,6 +19,11 @@ const columns = [
     key: "thumbnail",
   },
   {
+    title: "图片Alt",
+    dataIndex: "alt",
+    key: "alt",
+  },
+  {
     title: "操作",
     key: "action",
     width: 280,
@@ -26,7 +31,7 @@ const columns = [
 ];
 
 function handleAdd() {
-  dataSource.value.push({ img: "", thumbnail: "" });
+  dataSource.value.push({ img: "", thumbnail: "", alt: "" });
 }
 
 function handleDel(index) {
@@ -72,6 +77,9 @@ watch(
         </template>
         <template v-if="column.key === 'thumbnail'">
           <FileInput v-model:url="record.thumbnail" />
+        </template>
+        <template v-if="column.key === 'alt'">
+          <Input allow-clear v-model:value="record.alt" placeholder="请输入图片Alt" />
         </template>
         <template v-if="column.key === 'action'">
           <Button size="small" type="primary" danger @click="handleDel(index)"

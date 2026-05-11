@@ -6,7 +6,7 @@ import { Table, Button, Input, Textarea, Form, FormItem } from "ant-design-vue";
 import { postDetail } from '../postDetail'
 import FileInput from '../common/FileInput.vue';
 
-const data = ref({ title1: "", title2: "", img: "" })
+const data = ref({ title1: "", title2: "", img: "", alt: "" })
 
 watch(() => postDetail.value, (val) => {
   const info = val.metadata.annotations.headerImage
@@ -38,6 +38,9 @@ defineExpose({ data })
     <div>
       <FormItem label="背景图片">
         <FileInput v-model:url="data.img"></FileInput>
+      </FormItem>
+      <FormItem label="图片Alt">
+        <Input allow-clear v-model:value="data.alt" placeholder="请输入图片Alt" />
       </FormItem>
     </div>
   </div>

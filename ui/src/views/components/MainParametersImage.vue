@@ -21,6 +21,11 @@ const columns = [
     key: "value",
   },
   {
+    title: "图片Alt",
+    dataIndex: "alt",
+    key: "alt",
+  },
+  {
     title: "操作",
     key: "action",
     width: 280,
@@ -28,7 +33,7 @@ const columns = [
 ];
 
 function handleAdd() {
-  dataSource.value.push({ img: "", value: "" });
+  dataSource.value.push({ img: "", value: "", alt: "" });
 }
 
 
@@ -78,6 +83,13 @@ watch(
             allow-clear
             v-model:value="record.value"
             placeholder="请输入底部文字"
+          ></Input>
+        </template>
+        <template v-if="column.key === 'alt'">
+          <Input
+            allow-clear
+            v-model:value="record.alt"
+            placeholder="请输入图片Alt"
           ></Input>
         </template>
         <template v-if="column.key === 'action'">
