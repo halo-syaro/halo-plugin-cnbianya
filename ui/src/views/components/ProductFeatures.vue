@@ -2,14 +2,14 @@
 // @ts-nocheck
 import { ref, watch, h } from "vue";
 import Title from "./Title.vue";
-import { Table, Button, Input, Divider } from "ant-design-vue";
+import { Table, Button, Input, Divider, Textarea } from "ant-design-vue";
 import { postDetail } from "../postDetail";
 import FileInput from "../common/FileInput.vue";
 
 const dataSource = ref([]);
 const columns = [
   {
-    title: "图片地址",
+    title: "SVG图标",
     dataIndex: "img",
     key: "img",
   },
@@ -19,14 +19,9 @@ const columns = [
     key: "title",
   },
   {
-    title: "文字描述",
-    dataIndex: "desc",
-    key: "desc",
-  },
-  {
-    title: "图片Alt",
-    dataIndex: "alt",
-    key: "alt",
+    title: "内容(使用|分割每一项)",
+    dataIndex: "content",
+    key: "content",
   },
   {
     title: "操作",
@@ -36,7 +31,7 @@ const columns = [
 ];
 
 function handleAdd() {
-  dataSource.value.push({ img: "", title: "", desc: "", alt: "" });
+  dataSource.value.push({ img: "", title: "", content: "" });
 }
 
 function handleDel(index) {
@@ -72,7 +67,7 @@ watch(
 
 <template>
   <div>
-    <Title title="产品特点" tip="6条数据">
+    <Title title="产品特点" tip="最佳6条数据" :tipType="1">
       <Button @click="handleAdd">新增</Button>
     </Title>
     <Table :dataSource="dataSource" :columns="columns" :pagination="false">
@@ -87,12 +82,12 @@ watch(
             placeholder="请输入标题"
           ></Input>
         </template>
-        <template v-if="column.key === 'desc'">
-          <Input
+        <template v-if="column.key === 'content'">
+          <Textarea
             allow-clear
-            v-model:value="record.desc"
+            v-model:value="record.content"
             placeholder="请输入描述"
-          ></Input>
+          ></Textarea>
         </template>
         <template v-if="column.key === 'alt'">
           <Input
