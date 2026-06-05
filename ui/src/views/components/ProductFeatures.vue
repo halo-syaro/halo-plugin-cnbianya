@@ -20,8 +20,8 @@ const columns = [
   },
   {
     title: "内容(使用|分割每一项)",
-    dataIndex: "content",
-    key: "content",
+    dataIndex: "desc",
+    key: "desc",
   },
   {
     title: "操作",
@@ -31,7 +31,7 @@ const columns = [
 ];
 
 function handleAdd() {
-  dataSource.value.push({ img: "", title: "", content: "" });
+  dataSource.value.push({ img: "", title: "", desc: "" });
 }
 
 function handleDel(index) {
@@ -82,10 +82,10 @@ watch(
             placeholder="请输入标题"
           ></Input>
         </template>
-        <template v-if="column.key === 'content'">
+        <template v-if="column.key === 'desc'">
           <Textarea
             allow-clear
-            v-model:value="record.content"
+            v-model:value="record.desc"
             placeholder="请输入描述"
           ></Textarea>
         </template>
