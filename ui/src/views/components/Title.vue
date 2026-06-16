@@ -1,7 +1,8 @@
 <template>
   <div class="flex justify-between title items-center">
     <div class="flex items-center gap-2">
-      <h1>{{ title }}</h1>
+      <h1 v-if="leave == 1">{{ title }}</h1>
+      <h2 v-if="leave == 2">{{title}}</h2>
       <Tag v-if="tip" :color="tagColor">{{ tip }}</Tag>
     </div>
     <slot></slot>
@@ -14,7 +15,8 @@ import { Tag } from "ant-design-vue";
 const props = defineProps({
   title: { type: String, default: "" },
   tip: { type: String, default: "" },
-  tipType: { type: Number, default: 0 }
+  tipType: { type: Number, default: 0 },
+  leave: { type: Number, default: 1 },
 })
 
 const tagColorMap = {
@@ -33,5 +35,9 @@ const tagColor = computed(() => tagColorMap[props.tipType])
   border-bottom: 1px solid #f1f1f1;
   margin-bottom: 10px;
   font-weight: bold;
+}
+h2 {
+  font-weight: normal;
+  font-size: 16px;
 }
 </style>
