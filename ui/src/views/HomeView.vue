@@ -173,23 +173,23 @@ async function handleUpdatePostDetail() {
     return
   }
   
-  const digitalIntelligenceData = digitalIntelligenceRef.value.data()
-  if (!digitalIntelligenceData.left?.alt || !digitalIntelligenceData.left?.img || !digitalIntelligenceData.left?.title) {
-    Modal.error({ title: 'Digital Intelligence & Manufacturing Excellence 【左侧】模块错误', content: `左侧每项均必填` })
-    return
-  }
-  if (!digitalIntelligenceData.right.title || !digitalIntelligenceData.right.subtitle) {
-    Modal.error({ title: 'Digital Intelligence & Manufacturing Excellence 【右侧】模块错误', content: '右侧 标题、副标题 不能为空' })
-    return
-  }
-  if (digitalIntelligenceData.right.data.length !== 5) {
-    Modal.error({ title: 'Digital Intelligence & Manufacturing Excellence 【右侧】模块错误', content: '数量必须等于5' })
-    return
-  }
-  if (digitalIntelligenceData.right.data.some(ele => !ele.img || !ele.title)) {
-    Modal.error({ title: 'Digital Intelligence & Manufacturing Excellence 【右侧】模块错误', content: '表格每项 图片、标题 不能为空' })
-    return
-  }
+  // const digitalIntelligenceData = digitalIntelligenceRef.value.data()
+  // if (!digitalIntelligenceData.left?.alt || !digitalIntelligenceData.left?.img || !digitalIntelligenceData.left?.title) {
+  //   Modal.error({ title: 'Digital Intelligence & Manufacturing Excellence 【左侧】模块错误', content: `左侧每项均必填` })
+  //   return
+  // }
+  // if (!digitalIntelligenceData.right.title || !digitalIntelligenceData.right.subtitle) {
+  //   Modal.error({ title: 'Digital Intelligence & Manufacturing Excellence 【右侧】模块错误', content: '右侧 标题、副标题 不能为空' })
+  //   return
+  // }
+  // if (digitalIntelligenceData.right.data.length !== 5) {
+  //   Modal.error({ title: 'Digital Intelligence & Manufacturing Excellence 【右侧】模块错误', content: '数量必须等于5' })
+  //   return
+  // }
+  // if (digitalIntelligenceData.right.data.some(ele => !ele.img || !ele.title)) {
+  //   Modal.error({ title: 'Digital Intelligence & Manufacturing Excellence 【右侧】模块错误', content: '表格每项 图片、标题 不能为空' })
+  //   return
+  // }
   loading.value = true
   const rankMap = rankRef.value.generateSubmitMap()
   const obj = {
@@ -204,7 +204,7 @@ async function handleUpdatePostDetail() {
     mainParameters: JSON.stringify(mainParametersRef.value.dataSource),
     mainParametersImage: JSON.stringify(mainParametersImageRef.value.dataSource),
     implementationStandards: JSON.stringify(implementationStandardsRef.value.dataSource),
-    digitalIntelligence: JSON.stringify(digitalIntelligenceRef.value.data()),
+    // digitalIntelligence: JSON.stringify(digitalIntelligenceRef.value.data()),
     // technicalAdvantages: JSON.stringify(technicalAdvantagesRef.value.dataSource)
   }
   postDetail.value.metadata.annotations = {
@@ -353,7 +353,7 @@ getCategory().then((data) => {
             <MainParameters ref="mainParametersRef" class="mb-[40px]" />
             <MainParametersImage ref="mainParametersImageRef" class="mb-[40px] hidden" />
             <ImplementationStandards ref="implementationStandardsRef" class="mb-[40px]" />
-            <DigitalIntelligence ref="digitalIntelligenceRef" class="mb-[40px]"></DigitalIntelligence>
+<!--            <DigitalIntelligence ref="digitalIntelligenceRef" class="mb-[40px]"></DigitalIntelligence>-->
 <!--            <TechnicalAdvantages ref="technicalAdvantagesRef" />-->
           </Spin>
         </Drawer>
