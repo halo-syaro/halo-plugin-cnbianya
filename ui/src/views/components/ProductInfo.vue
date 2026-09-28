@@ -6,18 +6,12 @@ import { Table, Button, Input, Textarea, Form, FormItem } from "ant-design-vue";
 import { postDetail } from '../postDetail'
 import FileInput from '../common/FileInput.vue';
 
-const data = ref({ title1: "", title2: "", desc: "", img: "" })
+const data = ref({ title1: "", title2: "", desc: "", img: "", downloadUrl: "" })
 
 watch(() => postDetail.value, (val) => {
   const info = val.metadata.annotations.productInfo
-  if (info) {
-    const infoObj = JSON.parse(info || '{}') || {}
-    for (const key in infoObj) {
-      if (infoObj.hasOwnProperty(key)) {
-        data.value[key] = infoObj[key]
-      }
-    }
-  }
+  const infoObj = JSON.parse(info || '{}') || {}
+  data.value = { title1: "", title2: "", desc: "", img: "", downloadUrl: "", ...infoObj }
 })
 
 
@@ -38,6 +32,9 @@ defineExpose({ data })
     <Form layout="vertical">
       <FormItem label="文字描述">
         <Textarea v-model:value="data.desc" placeholder="请输入产品介绍文字描述" allow-clear :auto-size="{ minRows: 2, maxRows: 5 }"></Textarea>
+      </FormItem>
+      <FormItem label="下载链接">
+        <FileInput v-model:url="data.downloadUrl" placeholder="请输入下载链接" />
       </FormItem>
       <!-- <FormItem label="图片地址">
         <FileInput v-model:url="data.img" />
